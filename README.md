@@ -9,7 +9,7 @@ Copy the project into web server root
 ```
 git clone https://github.com/tawfiqur/webrtc-calling.git
 mv webrtc-calling/* .
-rm webrtc-calling
+rm -rf webrtc-calling
 ```
 
 Open server.js file & find the following code block at the begning of the file and 
