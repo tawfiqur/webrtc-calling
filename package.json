@@ -1,0 +1,16 @@
+{
+  "name": "webrtc-calling",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ['Webrtc-Calling', 'webrtc'],
+  "author": "Tawfiqur Rahman",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
+}
