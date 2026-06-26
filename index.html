@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WebRTC Dialer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Prevents elastic scrolling bounces on iOS/Android browsers */
+        html, body {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+        .loading::after {
+            content: ' .';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: ' .'; }
+            40% { content: ' ..'; }
+            60% { content: ' ...'; }
+            80%, 100% { content: ''; }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans antialiased">
+
+    <main class="w-full h-[100dvh] flex flex-col justify-between items-center p-3 sm:p-6 md:justify-center">
+        
+        <div class="w-full max-w-md h-full flex flex-col justify-between md:h-auto md:bg-slate-800 md:p-6 md:rounded-2xl md:shadow-2xl">
+            
+            <header class="text-center py-2 flex flex-col items-center">
+                <h1 class="text-xs uppercase tracking-widest text-emerald-400 font-bold mb-1">Live JogaJog Network</h1>
+                <div class="flex items-center gap-2 bg-slate-800/80 px-4 py-1.5 rounded-full border border-slate-700 md:bg-slate-900">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-sm font-medium">Extension:</span>
+                    <span id="my-id" class="font-mono font-bold text-emerald-400">Connecting...</span>
+                </div>
+                
+                <div id="duration-badge" class="hidden mt-2 bg-rose-500/20 text-rose-300 px-3 py-0.5 rounded-md text-xs border border-rose-500/30 font-mono animate-pulse">
+                    On Air: <span id="call-duration">00:00</span>
+                </div>
+            </header>
+
+            <section class="relative flex-grow my-3 bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-inner flex items-center justify-center min-h-[160px] md:h-64">
+                <video id="remote-video" autoplay playsinline class="w-full h-full object-cover bg-slate-950"></video>
+                
+                <div class="absolute bottom-3 right-3 w-24 h-32 bg-slate-950 rounded-lg border border-slate-700 overflow-hidden shadow-xl z-10 sm:w-28 sm:h-36">
+                    <video id="local-video" autoplay playsinline muted class="w-full h-full object-cover bg-slate-950"></video>
+                </div>
+            </section>
+
+            <section class="w-full flex flex-col gap-2.5 pb-2">
+                <div class="relative w-full flex items-center">
+                    <input type="text" id="dial-display" readonly maxlength="4" placeholder="Enter 4-Digit Ext" 
+                           class="w-full bg-slate-950 border border-slate-700/60 rounded-xl text-center text-2xl font-mono py-2.5 px-12 tracking-widest focus:outline-none text-emerald-300 shadow-inner placeholder:text-sm placeholder:text-slate-600 placeholder:tracking-normal">
+                    <button onclick="backspaceDisplay()" class="absolute right-3 text-slate-400 hover:text-slate-200 p-2 text-lg active:scale-95 transition-transform">âŒ«</button>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-xl font-medium">
+                    <button onclick="pressKey('1')" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 py-3 rounded-xl transition-colors active:scale-95 duration-700 shadow-sm">1</button>
+                    <button onclick="pressKey('2')" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 py-3 rounded-xl transition-colors active:scale-95 duration-700 shadow-sm">2</button>
+                    <button onclick="pressKey('3')" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 py-3 rounded-xl transition-colors active:scale-95 duration-700 shadow-sm">3</button>
+                    
+                    <button onclick="pressKey('4')" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 py-3 rounded-xl transition-colors active:scale-95 duration-700 shadow-sm">4</button>
+                    <button onclick="pressKey('5')" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 py-3 rounded-xl transition-colors active:scale-95 duration-700 shadow-sm">5</button>
+                    <button onclick="pressKey('6')" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 py-3 rounded-xl transition-colors active:scale-95 duration-700 shadow-sm">6</button>
+                    
+                    <button onclick="pressKey('7')" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 py-3 rounded-xl transition-colors active:scale-95 duration-700 shadow-sm">7</button>
+                    <button onclick="pressKey('8')" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 py-3 rounded-xl transition-colors active:scale-95 duration-700 shadow-sm">8</button>
+                    <button onclick="pressKey('9')" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 py-3 rounded-xl transition-colors active:scale-95 duration-700 shadow-sm">9</button>
+                    
+                    <button onclick="clearDisplay()" class="bg-slate-800/40 text-slate-400 hover:bg-slate-800 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors active:scale-95">Clear</button>
+                    <button onclick="pressKey('0')" class="bg-slate-800 hover:bg-slate-700 active:bg-slate-600 py-3 rounded-xl transition-colors active:scale-95 duration-700 shadow-sm">0</button>
+                    <span class="bg-slate-900"></span> 
+                </div>
+
+                <div class="w-full mt-1.5">
+                    <button id="audio-call-btn" onclick="startCall('audio')" class="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 py-3.5 rounded-xl font-bold tracking-wide transition-colors flex items-center justify-center gap-2 shadow-lg active:scale-[0.99]">
+                        ðŸ“ž Voice Call
+                    </button>
+                    <button id="video-call-btn" onclick="startCall('video')" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 py-3.5 rounded-xl font-bold tracking-wide transition-colors flex items-center justify-center gap-2 shadow-lg active:scale-[0.99]">
+                        ðŸ“¹ Video Call
+                    </button>
+                    <button id="hangup-btn" onclick="hangUp()" class="hidden w-full bg-rose-600 hover:bg-rose-500 active:bg-rose-700 py-3.5 rounded-xl font-bold tracking-wide transition-colors flex items-center justify-center gap-2 shadow-lg active:scale-[0.99] animate-pulse">
+                        ðŸ›‘ End Call
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="incoming-modal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-slate-800 w-full max-w-sm rounded-2xl p-6 border border-slate-700 text-center shadow-2xl">
+            <div class="w-16 h-16 bg-indigo-600/20 text-indigo-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-indigo-500/30 animate-pulse">ðŸ””</div>
+            <h3 class="text-xl font-bold mb-1 text-slate-100">Inbound Connection</h3>
+            <p id="caller-status-text" class="text-sm text-slate-400 mb-6 font-mono">Extension ---- is requesting a call...</p>
+            <div class="grid grid-cols-2 gap-3 font-bold">
+                <button id="accept-btn" class="w-full bg-emerald-600 hover:bg-emerald-500 py-3 rounded-xl transition-colors shadow-md">Accept</button>
+                <button id="reject-btn" class="w-full bg-slate-700 hover:bg-slate-600 py-3 rounded-xl transition-colors shadow-md text-slate-300">Reject</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="ringtone-audio" src="https://assets.mixkit.co/active_storage/sfx/1359/1359-84.wav" loop preload="auto"></audio>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/app.js"></script>
+</body>
+</html>
