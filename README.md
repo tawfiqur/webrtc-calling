@@ -37,7 +37,7 @@ npm i
 
 Run socket server at server port 3000 (change the port number from server.js file if port 3000 is already in use)
 ```
-npm i pm2 -g //install pm2 globally if not installed in server) 
+npm i pm2 -g
 pm2 start 'node server.js' --name webrtc
 pm2 save
 pm2 startup
