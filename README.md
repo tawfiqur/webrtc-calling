@@ -1,6 +1,5 @@
-# webrtc-calling
-Make your **PRIVATE CALLING APPS**. 
-
+# webrtc-calling PWA
+Make your **PRIVATE CALLING APPS**.
 Simple webrtc calling apps works from your browser & will run in minimum possible server resource.
 
 Steps: 
