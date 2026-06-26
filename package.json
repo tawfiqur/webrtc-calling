@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js"
   },
-  "keywords": ['Webrtc-Calling', 'webrtc'],
+  "keywords": ["WebRTC-Calling", "Webrtc"],
   "author": "Tawfiqur Rahman",
   "license": "ISC",
   "dependencies": {
