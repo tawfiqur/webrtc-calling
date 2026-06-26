@@ -13,8 +13,8 @@ mv webrtc-calling/* .
 rm webrtc-calling
 ```
 
-Open server.js file & find the following code block at the begning of the file
-Replace example.com with your website address
+Open server.js file & find the following code block at the begning of the file and 
+replace example.com with your website address
 
 ```
 const io = new Server(server, {
