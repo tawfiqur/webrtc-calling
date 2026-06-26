@@ -9,6 +9,7 @@ copy the project into web server root
 ```
 git clone https://github.com/tawfiqur/webrtc-calling.git
 mv webrtc-calling/* .
+rm webrtc-calling
 ```
 
 install node packages 
