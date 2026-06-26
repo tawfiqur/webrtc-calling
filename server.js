@@ -8,11 +8,13 @@ const app = express();
 const server = http.createServer(app);
 
 // Initialize Socket.io with strict proxy-aware CORS configurations
+//replace example.com with your website link
+
 const io = new Server(server, {
     cors: {
         origin: [
-            "https://live.jogajog.com.bd",
-            "http://live.jogajog.com.bd"
+            "https://example.com",
+            "http://example.com"
         ],
         methods: ["GET", "POST"],
         credentials: true
