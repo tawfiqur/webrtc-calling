@@ -4,19 +4,19 @@ simple webrtc calling apps works from your browser & will run in minimum possibl
 
 Steps: 
 
-**copy the project into web server root
-**
+copy the project into web server root
+
 ```
 git clone https://github.com/tawfiqur/webrtc-calling.git
 mv webrtc-calling/* .
 ```
 
-**install node packages** 
+install node packages 
 ```
 npm i
 ```
 
-**run socket server at server port 3000 (change the port number from server.js file if port 3000 is already in use)**  
+run socket server at server port 3000 (change the port number from server.js file if port 3000 is already in use)
 ```
 npm i pm2 -g //install pm2 globally if not installed in server) 
 pm2 start 'node server.js' --name webrtc
@@ -24,8 +24,7 @@ pm2 save
 pm2 startup
 ```
 
-**for apache: enable proxy & proxy_wstunnel 
-**
+for apache: enable proxy & proxy_wstunnel 
 ```
 sudo a2enmod proxy
 sudo a2enmod proxy_http
@@ -33,7 +32,7 @@ sudo a2enmod proxy_wstunnel
 sudo systemctl restart apache2
 ```
 
-**add following lines to your apache server config** 
+add following lines to your apache server config
 ```
 ProxyPreserveHost On
 ProxyRequests Off
@@ -47,7 +46,7 @@ ProxyPass / http://127.0.0.1:3000/
 ProxyPassReverse / http://127.0.0.1:3000/
 ```
 
-**test apache config**
+test apache config
 ```
 sudo apachectl configtest
 sudo systemctl restart apache2
