@@ -52,5 +52,5 @@ test apache config
 sudo apachectl configtest
 sudo systemctl reload apache2
 ```
-**visit your site form two different browser. you will find you extension number at the top, dial the number from the other browser. you can talk privately.
-**
+**visit your site form two different browser.** 
+**you will find you extension number at the top, dial the number from the other browser. you can talk privately.**
