@@ -1,5 +1,5 @@
 # webrtc-calling
-make your OWN PRIVATE CALLING APPS. 
+make your **PRIVATE CALLING APPS**. 
 simple webrtc calling apps works from your browser & will run in minimum possible server resource.
 
 Steps: 
