@@ -13,6 +13,24 @@ mv webrtc-calling/* .
 rm webrtc-calling
 ```
 
+Open server.js file & find the following code block at the begning of the file
+Replace example.com with your website address
+
+```
+const io = new Server(server, {
+    cors: {
+        origin: [
+            "https://example.com",
+            "http://example.com"
+        ],
+        methods: ["GET", "POST"],
+        credentials: true
+    },
+    allowEIO3: true,
+    transports: ['polling', 'websocket']
+});
+```
+
 Install node packages 
 ```
 npm i
