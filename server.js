@@ -92,6 +92,6 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`===================================================`);
     console.log(` Signaling Server successfully running on Port ${PORT}`);
-    console.log(` CORS Configured for: https://live.jogajog.com.bd`);
+    console.log(` CORS Configured for: https://example.com`);
     console.log(`===================================================`);
 });
